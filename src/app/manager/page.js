@@ -3,12 +3,13 @@
 import { useState, useEffect } from "react";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
+import Button from '@mui/material/Button';
 
 export default function ManagerUI() {
 
     const [orders, setOrders] = useState(null);
 
-    // MANAGER-ONLY session check
+
     useEffect(() => {
         const all = document.cookie.split(";");
         let session = null;
@@ -25,7 +26,6 @@ export default function ManagerUI() {
             }
         });
 
-        // if not logged in OR wrong role → go back to login
         if (!session || session.acctype !== "manager") {
             window.location.href = "/";
         }
@@ -40,7 +40,6 @@ export default function ManagerUI() {
 
     if (!orders) return <p>Loading orders...</p>;
 
-    // simple stats
     let revenue = 0;
     orders.forEach((o) => {
         revenue += Number(o.total);
@@ -77,7 +76,19 @@ export default function ManagerUI() {
                     Manager Dashboard
                 </div>
 
-                {/* summary stats */}
+                <div style={{ marginBottom: "10px" }}>
+                    <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={() => {
+                        document.cookie = "session=; path=/; max-age=0";
+                        window.location.href = "/";
+                        }}
+                    >
+                    Logout
+                    </Button>
+                </div>
+
                 <div
                     style={{
                         marginBottom: "20px",
@@ -91,12 +102,12 @@ export default function ManagerUI() {
                     <div><b>Most Popular Item:</b> {mostPopular}</div>
                 </div>
 
-                {/* link to graph page */}
+
                 <div style={{ marginBottom: "20px" }}>
                     <a href="/manager/graph">Graph data</a>
                 </div>
 
-                {/* orders list */}
+
                 {orders.map((order) => (
                     <div
                         key={order._id}

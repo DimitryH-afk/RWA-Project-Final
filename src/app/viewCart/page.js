@@ -32,7 +32,7 @@ export default function Page() {
     }, []);
 
     useEffect(() => {
-        fetch("http://localhost:3000/api/getCart")
+        fetch("/api/getCart")
             .then((res) => res.json())
             .then((data) => {
                 setItems(data);
@@ -40,10 +40,10 @@ export default function Page() {
     }, []);
 
     function removeItem(id) {
-        fetch("http://localhost:3000/api/deleteCart?id=" + id)
+        fetch("/api/deleteCart?id=" + id)
             .then(() => {
                 // refresh cart list
-                fetch("http://localhost:3000/api/getCart")
+                fetch("/api/getCart")
                     .then((res) => res.json())
                     .then((data) => setItems(data));
             });
@@ -61,6 +61,19 @@ export default function Page() {
                     Your Cart
                 </div>
 
+                <div style={{ marginBottom: "10px" }}>
+                    <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={() => {
+                        document.cookie = "session=; path=/; max-age=0";
+                        window.location.href = "/";
+                        }}
+                    >
+                    Logout
+                    </Button>
+                </div>
+                
                 {items.map((item) => (
                     <div
                         key={item._id}
@@ -83,9 +96,18 @@ export default function Page() {
                     </div>
                 ))}
 
-                <div style={{ marginTop: '20px', fontWeight: 'bold' }}>
-                    Total: €{total}
-                </div>
+                    <div style={{ marginTop: '20px', fontWeight: 'bold' }}>
+                       Total: €{total}
+                    </div>
+
+                    <Button
+                        variant="contained"
+                        sx={{ mt: 2 }}
+                        onClick={() => window.location.href = "/checkout"}
+                    >
+                    Go to Checkout
+                    </Button>
+
             </Box>
         </Container>
     );

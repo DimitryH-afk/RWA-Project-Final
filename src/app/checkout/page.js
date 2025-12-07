@@ -61,6 +61,19 @@ export default function CheckoutUI() {
                     Checkout
                 </div>
 
+                <div style={{ marginBottom: "10px" }}>
+                    <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={() => {
+                        document.cookie = "session=; path=/; max-age=0";
+                        window.location.href = "/";
+                        }}
+                    >
+                    Logout
+                    </Button>
+                </div>
+
                 {items.map((item) => (
                     <div
                         key={item._id}

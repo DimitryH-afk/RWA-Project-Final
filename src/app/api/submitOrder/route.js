@@ -33,7 +33,6 @@ export async function GET(req, res) {
         }
     });
 
-    // build the doc
     const order = {
         username: username,
         items: items,
@@ -41,10 +40,8 @@ export async function GET(req, res) {
         date: new Date().toISOString()
     };
 
-    // insert
     await db.collection("orders").insertOne(order);
 
-    // clear
     await db.collection("shopping_cart")
         .deleteMany({ username: username });
 

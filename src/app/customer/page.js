@@ -11,7 +11,7 @@ export default function CustomerPage() {
     const [weather, setWeather] = useState(null);
     const [weatherError, setWeatherError] = useState(null);
 
-    // simple client-side "session" check for customer pages
+    
     useEffect(() => {
         const all = document.cookie.split(";");
         let session = null;
@@ -76,7 +76,7 @@ export default function CustomerPage() {
 
     function putInCart(pname) {
         console.log("putting in cart:", pname);
-        fetch("http://localhost:3000/api/cart?pname=" + encodeURIComponent(pname));
+        fetch("/api/cart?pname=" + encodeURIComponent(pname));
     }
 
     return (
@@ -114,6 +114,19 @@ export default function CustomerPage() {
 
                 <div style={{ fontSize: '24px', marginBottom: '20px' }}>
                     Customer Products
+                </div>
+
+                <div style={{ marginBottom: "10px" }}>
+                    <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={() => {
+                        document.cookie = "session=; path=/; max-age=0";
+                        window.location.href = "/";
+                        }}
+                    >
+                    Logout
+                    </Button>
                 </div>
 
                 {data.map((item, i) => (
