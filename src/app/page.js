@@ -22,7 +22,7 @@ export default function Home() {
         console.log("Sent email:" + email);
         console.log("Sent pass:" + pass);
 
-        runDBCallAsync(`http://localhost:3000/api/login?email=${email}&pass=${pass}`);
+        runDBCallAsync(`/api/login?email=${email}&pass=${pass}`);
     };
 
     async function runDBCallAsync(url) {
