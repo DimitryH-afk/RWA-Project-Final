@@ -24,7 +24,7 @@ export default function RegisterPage() {
         console.log("Register dob:" + dob);
 
         runDBCallAsync(
-            `http://localhost:3000/api/register?email=${email}&pass=${pass}&dob=${dob}`
+            `/api/register?email=${email}&pass=${pass}&dob=${dob}`
         );
     };
 
