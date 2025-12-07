@@ -4,36 +4,38 @@ import * as React from 'react';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 
-export default function Home() {
+export default function RegisterPage() {
 
     const handleSubmit = (event) => {
-        console.log("handling submit");
+        console.log("handling register");
         event.preventDefault();
 
         const data = new FormData(event.currentTarget);
         let email = data.get('email');
         let pass = data.get('pass');
+        let dob = data.get('dob');
 
-        console.log("Sent email:" + email);
-        console.log("Sent pass:" + pass);
+        console.log("Register email:" + email);
+        console.log("Register pass:" + pass);
+        console.log("Register dob:" + dob);
 
-        runDBCallAsync(`http://localhost:3000/api/login?email=${email}&pass=${pass}`);
+        runDBCallAsync(
+            `http://localhost:3000/api/register?email=${email}&pass=${pass}&dob=${dob}`
+        );
     };
 
     async function runDBCallAsync(url) {
         const res = await fetch(url);
         const data = await res.json();
 
-        if (data.data === "valid") {
-            console.log("login is valid!");
-            // later we will redirect based on role (manager/customer)
+        if (data.data === "ok") {
+            console.log("registration complete");
+            // later you can redirect to /login automatically if you want
         } else {
-            console.log("not valid");
+            console.log("registration failed");
         }
     }
 
@@ -64,24 +66,29 @@ export default function Home() {
                         label="Password"
                         type="password"
                         id="pass"
-                        autoComplete="current-password"
                     />
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="dob"
+                        label="Date of Birth"
+                        id="dob"
+                        placeholder="2000-01-01"
                     />
+
                     <Button
                         type="submit"
                         fullWidth
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
                     >
-                        Sign In
+                        Register
                     </Button>
 
-                    <Box sx={{ textAlign: 'center', mt: 1 }}>
-                        <Link href="/register" variant="body2">
-                            Don&apos;t have an account? Register here
+                    <Box sx={{ textAlign: 'center' }}>
+                        <Link href="/" variant="body2">
+                            Already have an account? Login here
                         </Link>
                     </Box>
                 </Box>
