@@ -15,9 +15,9 @@ export async function GET(req, res) {
     console.log('Connected successfully to server (putInCart)');
 
     const db = client.db(dbName);
-    const collection = db.collection('shopping_cart'); // collection name
+    const collection = db.collection('shopping_cart'); 
 
-    // for now, hard-coded username (same idea as lab guide)
+    // temp username
     const myobj = { pname: pname, username: "sample@test.com" };
 
     const insertResult = await collection.insertOne(myobj);

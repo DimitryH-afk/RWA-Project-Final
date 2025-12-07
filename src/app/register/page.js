@@ -18,6 +18,7 @@ export default function RegisterPage() {
         let pass = data.get('pass');
         let dob = data.get('dob');
 
+        //debug
         console.log("Register email:" + email);
         console.log("Register pass:" + pass);
         console.log("Register dob:" + dob);
@@ -33,7 +34,6 @@ export default function RegisterPage() {
 
         if (data.data === "ok") {
             console.log("registration complete");
-            // later you can redirect to /login automatically if you want
         } else {
             console.log("registration failed");
         }
