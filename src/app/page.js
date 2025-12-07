@@ -31,7 +31,6 @@ export default function Home() {
 
         if (data.data === "valid") {
             console.log("login is valid!");
-            // later we will redirect based on role (manager/customer)
         } else {
             console.log("not valid");
         }

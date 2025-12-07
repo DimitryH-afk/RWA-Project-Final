@@ -9,12 +9,45 @@ import Button from '@mui/material/Button';
 export default function Page() {
 
     const [data, setData] = useState(null);
+    const [weather, setWeather] = useState(null);
+    const [weatherError, setWeatherError] = useState(null);
 
+    // get list of products
     useEffect(() => {
         fetch('http://localhost:3000/api/getProducts')
             .then((res) => res.json())
             .then((data) => {
                 setData(data);
+            });
+    }, []);
+
+    // get weather data
+    useEffect(() => {
+        const apiKey = process.env.NEXT_PUBLIC_WEATHER_KEY;
+        const city = "Dublin";
+        const url =
+            "https://api.openweathermap.org/data/2.5/weather?q="
+            + city
+            + "&units=metric&appid="
+            + apiKey;
+
+        fetch(url)
+            .then((res) => res.json())
+            .then((json) => {
+                console.log("weather json:", json);
+
+                if (json.cod === 200 && json.main && json.weather && json.weather.length > 0) {
+                    setWeather({
+                        temp: json.main.temp,
+                        desc: json.weather[0].description
+                    });
+                } else {
+                    setWeatherError(json.message || "Weather service error");
+                }
+            })
+            .catch((err) => {
+                console.log("weather error", err);
+                setWeatherError("Weather service error");
             });
     }, []);
 
@@ -28,6 +61,37 @@ export default function Page() {
     return (
         <Container maxWidth="sm">
             <Box sx={{ mt: 4 }}>
+
+                {weather && (
+                    <div
+                        style={{
+                            marginBottom: '20px',
+                            padding: '10px',
+                            border: '1px solid #ccc',
+                            borderRadius: '4px'
+                        }}
+                    >
+                        <div style={{ fontWeight: 'bold' }}>Current Weather</div>
+                        <div>
+                            {Math.round(weather.temp)}°C, {weather.desc}
+                        </div>
+                    </div>
+                )}
+
+                {!weather && weatherError && (
+                    <div
+                        style={{
+                            marginBottom: '20px',
+                            padding: '10px',
+                            border: '1px solid #ccc',
+                            borderRadius: '4px'
+                        }}
+                    >
+                        <div style={{ fontWeight: 'bold' }}>Current Weather</div>
+                        <div>Weather service not available ({weatherError})</div>
+                    </div>
+                )}
+
                 <div style={{ fontSize: '24px', marginBottom: '20px' }}>
                     Customer Products
                 </div>
