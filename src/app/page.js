@@ -26,15 +26,22 @@ export default function Home() {
     };
 
     async function runDBCallAsync(url) {
-        const res = await fetch(url);
-        const data = await res.json();
+    const res = await fetch(url);
+    const data = await res.json();
 
-        if (data.data === "valid") {
-            console.log("login is valid!");
-        } else {
-            console.log("not valid");
+    if (data.data === "valid") {
+        console.log("login is valid!");
+
+        if (data.acctype === "customer") {
+            window.location.href = "/customer";
+        } else if (data.acctype === "manager") {
+            window.location.href = "/manager";
         }
+    } else {
+        console.log("not valid");
     }
+}
+
 
     return (
         <Container maxWidth="sm">

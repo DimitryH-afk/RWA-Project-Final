@@ -1,15 +1,56 @@
+import { MongoClient } from "mongodb";
+import bcrypt from "bcrypt";
+import { cookies } from "next/headers";
+
 export async function GET(req, res) {
 
-    console.log("in the api page");
+    console.log("in the real login API");
 
     const { searchParams } = new URL(req.url);
-    const email = searchParams.get('email');
-    const pass = searchParams.get('pass');
+    const email = searchParams.get("email");
+    const pass = searchParams.get("pass");
 
     console.log("API got email:", email);
     console.log("API got pass:", pass);
 
-    // database call will go here later
+    // connect to MongoDB
+    const client = new MongoClient(process.env.MONGO_URL);
+    await client.connect();
+    const db = client.db("app");
 
-    return Response.json({ "data": "valid" });
+    const collection = db.collection("login");
+
+    // find user by email
+    const user = await collection.findOne({ username: email });
+
+    if (!user) {
+        console.log("user not found");
+        return Response.json({ data: "invalid" });
+    }
+
+    // compare passwords
+    const match = bcrypt.compareSync(pass, user.pass);
+
+    if (!match) {
+        console.log("password mismatch");
+        return Response.json({ data: "invalid" });
+    }
+
+    console.log("password valid!");
+
+    // create session cookie
+    const sessionData = {
+        username: user.username,
+        acctype: user.acctype
+    };
+
+    cookies().set("session", JSON.stringify(sessionData), {
+        httpOnly: false,        // allowed in this module (simplified)
+        path: "/"
+    });
+
+    return Response.json({
+        data: "valid",
+        acctype: user.acctype
+    });
 }

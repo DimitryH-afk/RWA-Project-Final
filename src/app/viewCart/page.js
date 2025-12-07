@@ -1,3 +1,19 @@
+// Server Code
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+
+export function checkSession() {
+    const cookie = cookies().get("session");
+    if (!cookie) redirect("/");
+
+    const session = JSON.parse(cookie.value);
+    if (session.acctype !== "customer") redirect("/");
+}
+
+checkSession();
+
+
+// Client Code
 'use client';
 
 import { useState, useEffect } from 'react';
