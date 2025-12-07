@@ -1,6 +1,5 @@
 import { MongoClient } from "mongodb";
 import bcrypt from "bcrypt";
-import { cookies } from "next/headers";
 
 export async function GET(req, res) {
 
@@ -38,19 +37,9 @@ export async function GET(req, res) {
 
     console.log("password valid!");
 
-    // create session cookie
-    const sessionData = {
-        username: user.username,
-        acctype: user.acctype
-    };
-
-    cookies().set("session", JSON.stringify(sessionData), {
-        httpOnly: false,        // allowed in this module (simplified)
-        path: "/"
-    });
-
     return Response.json({
         data: "valid",
+        username: user.username,
         acctype: user.acctype
     });
 }
